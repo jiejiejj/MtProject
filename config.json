@@ -1,0 +1,21 @@
+{
+  "task": "baseline",
+  "train_src_path": "gl_to_en/gl.train",
+  "train_tgt_path": "gl_to_en/en.train",
+  "dev_src_path": "gl_to_en/gl.dev",
+  "dev_tgt_path": "gl_to_en/en.dev",
+  "src_lang": "gl_ES",
+  "tgt_lang": "en_XX",
+  "model_name": "facebook/mbart-large-50",
+  "outputs_path": "outputs/",
+  "gpu": "0,1,2,3",
+  "epochs": 2,
+  "batch_size": 1,
+  "body_maxlen": 512,
+  "target_maxlen": 512,
+  "hidden_size": 1024,
+  "best_loss": 80,
+  "seeds": 65,
+  "lr": 1e-5,
+  "weight_decay": 1e-2
+}
