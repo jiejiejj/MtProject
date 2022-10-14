@@ -1,0 +1,68 @@
+/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/apex-0.1-py3.8.egg/apex/__init__.py:68: DeprecatedFeatureWarning: apex.amp is deprecated and will be removed by the end of February 2023. Use [PyTorch AMP](https://pytorch.org/docs/stable/amp.html)
+  0%|          | 0/10017 [00:00<?, ?it/s]/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/transformers/tokenization_utils_base.py:3668: FutureWarning:
+`prepare_seq2seq_batch` is deprecated and will be removed in version 5 of HuggingFace Transformers. Use the regular
+`__call__` method to prepare your inputs and targets.
+Here is a short example:
+model_inputs = tokenizer(src_texts, text_target=tgt_texts, ...)
+If you either need to use different keyword arguments for the source and target texts, you should do two calls like
+this:
+model_inputs = tokenizer(src_texts, ...)
+labels = tokenizer(text_target=tgt_texts, ...)
+model_inputs["labels"] = labels["input_ids"]
+See the documentation of your specific tokenizer for more details on the specific arguments to the tokenizer of choice.
+For a more complete example, see the implementation of `prepare_seq2seq_batch`.
+  warnings.warn(formatted_warning, FutureWarning)
+/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/transformers/tokenization_utils_base.py:3542: UserWarning: `as_target_tokenizer` is deprecated and will be removed in v5 of Transformers. You can tokenize your labels by using the argument `text_target` of the regular `__call__` method (either in the same call as your input texts if you use the same keyword arguments, or in a separate call.
+  warnings.warn(
+  0%|          | 1/10017 [00:01<2:51:15,  1.03s/it]INFO:baseline:step 1, training loss 19.412818908691406
+Selected optimization level O1:  Insert automatic casts around Pytorch functions and Tensor methods.
+Defaults for this optimization level are:
+enabled                : True
+opt_level              : O1
+cast_model_type        : None
+patch_torch_functions  : True
+keep_batchnorm_fp32    : None
+master_weights         : None
+loss_scale             : dynamic
+Processing user overrides (additional kwargs that are not None)...
+After processing overrides, optimization options are:
+enabled                : True
+opt_level              : O1
+cast_model_type        : None
+patch_torch_functions  : True
+keep_batchnorm_fp32    : None
+master_weights         : None
+loss_scale             : dynamic
+Warning:  multi_tensor_applier fused unscale kernel is unavailable, possibly because apex was installed without --cuda_ext --cpp_ext. Using Python fallback.  Original ImportError was: ModuleNotFoundError("No module named 'amp_C'")
+Gradient overflow.  Skipping step, loss scaler 0 reducing loss scale to 32768.0
+  0%|          | 2/10017 [00:01<2:23:17,  1.16it/s]INFO:baseline:step 2, training loss 17.740943908691406
+  0%|          | 3/10017 [00:02<2:00:56,  1.38it/s]INFO:baseline:step 3, training loss 17.981929779052734
+  0%|          | 4/10017 [00:02<1:45:22,  1.58it/s]INFO:baseline:step 4, training loss 18.47963523864746
+  0%|          | 5/10017 [00:03<1:36:43,  1.73it/s]INFO:baseline:step 5, training loss 19.799327850341797
+Gradient overflow.  Skipping step, loss scaler 0 reducing loss scale to 16384.0
+Gradient overflow.  Skipping step, loss scaler 0 reducing loss scale to 8192.0
+Gradient overflow.  Skipping step, loss scaler 0 reducing loss scale to 4096.0
+Gradient overflow.  Skipping step, loss scaler 0 reducing loss scale to 2048.0
+  0%|          | 5/10017 [00:03<2:08:38,  1.30it/s]
+Traceback (most recent call last):
+  File "run.py", line 236, in <module>
+    train(model, optimizer, train_loader, dev_loader, epochs=cfg['epochs'])
+  File "run.py", line 143, in train
+    scaled_loss.backward()
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/contextlib.py", line 120, in __exit__
+    next(self.gen)
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/apex-0.1-py3.8.egg/apex/amp/handle.py", line 123, in scale_loss
+    optimizer._post_amp_backward(loss_scaler)
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/apex-0.1-py3.8.egg/apex/amp/_process_optimizer.py", line 249, in post_backward_no_master_weights
+    post_backward_models_are_masters(scaler, params, stashed_grads)
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/apex-0.1-py3.8.egg/apex/amp/_process_optimizer.py", line 131, in post_backward_models_are_masters
+    scaler.unscale_with_stashed(
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/apex-0.1-py3.8.egg/apex/amp/scaler.py", line 180, in unscale_with_stashed
+    self.unscale_with_stashed_python(model_grads,
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/apex-0.1-py3.8.egg/apex/amp/scaler.py", line 143, in unscale_with_stashed_python
+    self._has_overflow = axpby_check_overflow_python(model,
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/apex-0.1-py3.8.egg/apex/amp/scaler.py", line 30, in axpby_check_overflow_python
+    master_grad.data = a*converted_model_grad.data + b*stashed_grad.data
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/apex-0.1-py3.8.egg/apex/amp/wrap.py", line 53, in wrapper
+    return orig_fn(*args, **kwargs)
+RuntimeError: CUDA out of memory. Tried to allocate 978.00 MiB (GPU 0; 14.61 GiB total capacity; 12.15 GiB already allocated; 813.56 MiB free; 12.83 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF

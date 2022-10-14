@@ -1,58 +1,553 @@
-Error! When make dir /Users/taohuadao/Downloads/MtProject/outputstrain_2022-10-14-12-59-09/, the path status is:True
+/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/distributed/launch.py:178: FutureWarning: The module torch.distributed.launch is deprecated
+and will be removed in future. Use torchrun.
+Note that --use_env is set by default in torchrun.
+If your script expects `--local_rank` argument to be set, please
+change it to read from `os.environ['LOCAL_RANK']` instead. See 
+https://pytorch.org/docs/stable/distributed.html#launch-utility for 
+further instructions
+
+  warnings.warn(
+Discovered apex.normalization.FusedRMSNorm - will use it instead of LongT5LayerNorm
+Discovered apex.normalization.FusedRMSNorm - will use it instead of T5LayerNorm
+Error! When make dir /home/huangjie/MtProject/outputs/train_2022-10-14-19-16-57/, the path status is:True
 Reading training data...
+loading file sentencepiece.bpe.model from cache at /home/huangjie/.cache/huggingface/hub/models--facebook--mbart-large-50/snapshots/eab25f78110b11bfbf981249a6204e258f8a3312/sentencepiece.bpe.model
+loading file tokenizer.json from cache at None
+loading file added_tokens.json from cache at None
+loading file special_tokens_map.json from cache at /home/huangjie/.cache/huggingface/hub/models--facebook--mbart-large-50/snapshots/eab25f78110b11bfbf981249a6204e258f8a3312/special_tokens_map.json
+loading file tokenizer_config.json from cache at /home/huangjie/.cache/huggingface/hub/models--facebook--mbart-large-50/snapshots/eab25f78110b11bfbf981249a6204e258f8a3312/tokenizer_config.json
+loading configuration file config.json from cache at /home/huangjie/.cache/huggingface/hub/models--facebook--mbart-large-50/snapshots/eab25f78110b11bfbf981249a6204e258f8a3312/config.json
+Model config MBartConfig {
+  "_name_or_path": "facebook/mbart-large-50",
+  "_num_labels": 3,
+  "activation_dropout": 0.0,
+  "activation_function": "gelu",
+  "add_bias_logits": false,
+  "add_final_layer_norm": true,
+  "architectures": [
+    "MBartForConditionalGeneration"
+  ],
+  "attention_dropout": 0.0,
+  "bos_token_id": 0,
+  "classif_dropout": 0.0,
+  "classifier_dropout": 0.0,
+  "d_model": 1024,
+  "decoder_attention_heads": 16,
+  "decoder_ffn_dim": 4096,
+  "decoder_layerdrop": 0.0,
+  "decoder_layers": 12,
+  "decoder_start_token_id": 2,
+  "dropout": 0.1,
+  "early_stopping": true,
+  "encoder_attention_heads": 16,
+  "encoder_ffn_dim": 4096,
+  "encoder_layerdrop": 0.0,
+  "encoder_layers": 12,
+  "eos_token_id": 2,
+  "forced_eos_token_id": 2,
+  "gradient_checkpointing": false,
+  "id2label": {
+    "0": "LABEL_0",
+    "1": "LABEL_1",
+    "2": "LABEL_2"
+  },
+  "init_std": 0.02,
+  "is_encoder_decoder": true,
+  "label2id": {
+    "LABEL_0": 0,
+    "LABEL_1": 1,
+    "LABEL_2": 2
+  },
+  "max_length": 200,
+  "max_position_embeddings": 1024,
+  "model_type": "mbart",
+  "normalize_before": true,
+  "normalize_embedding": true,
+  "num_beams": 5,
+  "num_hidden_layers": 12,
+  "output_past": true,
+  "pad_token_id": 1,
+  "scale_embedding": true,
+  "static_position_embeddings": false,
+  "tokenizer_class": "MBart50Tokenizer",
+  "transformers_version": "4.23.1",
+  "use_cache": true,
+  "vocab_size": 250054
+}
+
+loading configuration file config.json from cache at /home/huangjie/.cache/huggingface/hub/models--facebook--mbart-large-50/snapshots/eab25f78110b11bfbf981249a6204e258f8a3312/config.json
+Model config MBartConfig {
+  "_name_or_path": "facebook/mbart-large-50",
+  "_num_labels": 3,
+  "activation_dropout": 0.0,
+  "activation_function": "gelu",
+  "add_bias_logits": false,
+  "add_final_layer_norm": true,
+  "architectures": [
+    "MBartForConditionalGeneration"
+  ],
+  "attention_dropout": 0.0,
+  "bos_token_id": 0,
+  "classif_dropout": 0.0,
+  "classifier_dropout": 0.0,
+  "d_model": 1024,
+  "decoder_attention_heads": 16,
+  "decoder_ffn_dim": 4096,
+  "decoder_layerdrop": 0.0,
+  "decoder_layers": 12,
+  "decoder_start_token_id": 2,
+  "dropout": 0.1,
+  "early_stopping": true,
+  "encoder_attention_heads": 16,
+  "encoder_ffn_dim": 4096,
+  "encoder_layerdrop": 0.0,
+  "encoder_layers": 12,
+  "eos_token_id": 2,
+  "forced_eos_token_id": 2,
+  "gradient_checkpointing": false,
+  "id2label": {
+    "0": "LABEL_0",
+    "1": "LABEL_1",
+    "2": "LABEL_2"
+  },
+  "init_std": 0.02,
+  "is_encoder_decoder": true,
+  "label2id": {
+    "LABEL_0": 0,
+    "LABEL_1": 1,
+    "LABEL_2": 2
+  },
+  "max_length": 200,
+  "max_position_embeddings": 1024,
+  "model_type": "mbart",
+  "normalize_before": true,
+  "normalize_embedding": true,
+  "num_beams": 5,
+  "num_hidden_layers": 12,
+  "output_past": true,
+  "pad_token_id": 1,
+  "scale_embedding": true,
+  "static_position_embeddings": false,
+  "tokenizer_class": "MBart50Tokenizer",
+  "transformers_version": "4.23.1",
+  "use_cache": true,
+  "vocab_size": 250054
+}
+
+Reading development data...
+loading file sentencepiece.bpe.model from cache at /home/huangjie/.cache/huggingface/hub/models--facebook--mbart-large-50/snapshots/eab25f78110b11bfbf981249a6204e258f8a3312/sentencepiece.bpe.model
+loading file tokenizer.json from cache at None
+loading file added_tokens.json from cache at None
+loading file special_tokens_map.json from cache at /home/huangjie/.cache/huggingface/hub/models--facebook--mbart-large-50/snapshots/eab25f78110b11bfbf981249a6204e258f8a3312/special_tokens_map.json
+loading file tokenizer_config.json from cache at /home/huangjie/.cache/huggingface/hub/models--facebook--mbart-large-50/snapshots/eab25f78110b11bfbf981249a6204e258f8a3312/tokenizer_config.json
+loading configuration file config.json from cache at /home/huangjie/.cache/huggingface/hub/models--facebook--mbart-large-50/snapshots/eab25f78110b11bfbf981249a6204e258f8a3312/config.json
+Model config MBartConfig {
+  "_name_or_path": "facebook/mbart-large-50",
+  "_num_labels": 3,
+  "activation_dropout": 0.0,
+  "activation_function": "gelu",
+  "add_bias_logits": false,
+  "add_final_layer_norm": true,
+  "architectures": [
+    "MBartForConditionalGeneration"
+  ],
+  "attention_dropout": 0.0,
+  "bos_token_id": 0,
+  "classif_dropout": 0.0,
+  "classifier_dropout": 0.0,
+  "d_model": 1024,
+  "decoder_attention_heads": 16,
+  "decoder_ffn_dim": 4096,
+  "decoder_layerdrop": 0.0,
+  "decoder_layers": 12,
+  "decoder_start_token_id": 2,
+  "dropout": 0.1,
+  "early_stopping": true,
+  "encoder_attention_heads": 16,
+  "encoder_ffn_dim": 4096,
+  "encoder_layerdrop": 0.0,
+  "encoder_layers": 12,
+  "eos_token_id": 2,
+  "forced_eos_token_id": 2,
+  "gradient_checkpointing": false,
+  "id2label": {
+    "0": "LABEL_0",
+    "1": "LABEL_1",
+    "2": "LABEL_2"
+  },
+  "init_std": 0.02,
+  "is_encoder_decoder": true,
+  "label2id": {
+    "LABEL_0": 0,
+    "LABEL_1": 1,
+    "LABEL_2": 2
+  },
+  "max_length": 200,
+  "max_position_embeddings": 1024,
+  "model_type": "mbart",
+  "normalize_before": true,
+  "normalize_embedding": true,
+  "num_beams": 5,
+  "num_hidden_layers": 12,
+  "output_past": true,
+  "pad_token_id": 1,
+  "scale_embedding": true,
+  "static_position_embeddings": false,
+  "tokenizer_class": "MBart50Tokenizer",
+  "transformers_version": "4.23.1",
+  "use_cache": true,
+  "vocab_size": 250054
+}
+
+loading configuration file config.json from cache at /home/huangjie/.cache/huggingface/hub/models--facebook--mbart-large-50/snapshots/eab25f78110b11bfbf981249a6204e258f8a3312/config.json
+Model config MBartConfig {
+  "_name_or_path": "facebook/mbart-large-50",
+  "_num_labels": 3,
+  "activation_dropout": 0.0,
+  "activation_function": "gelu",
+  "add_bias_logits": false,
+  "add_final_layer_norm": true,
+  "architectures": [
+    "MBartForConditionalGeneration"
+  ],
+  "attention_dropout": 0.0,
+  "bos_token_id": 0,
+  "classif_dropout": 0.0,
+  "classifier_dropout": 0.0,
+  "d_model": 1024,
+  "decoder_attention_heads": 16,
+  "decoder_ffn_dim": 4096,
+  "decoder_layerdrop": 0.0,
+  "decoder_layers": 12,
+  "decoder_start_token_id": 2,
+  "dropout": 0.1,
+  "early_stopping": true,
+  "encoder_attention_heads": 16,
+  "encoder_ffn_dim": 4096,
+  "encoder_layerdrop": 0.0,
+  "encoder_layers": 12,
+  "eos_token_id": 2,
+  "forced_eos_token_id": 2,
+  "gradient_checkpointing": false,
+  "id2label": {
+    "0": "LABEL_0",
+    "1": "LABEL_1",
+    "2": "LABEL_2"
+  },
+  "init_std": 0.02,
+  "is_encoder_decoder": true,
+  "label2id": {
+    "LABEL_0": 0,
+    "LABEL_1": 1,
+    "LABEL_2": 2
+  },
+  "max_length": 200,
+  "max_position_embeddings": 1024,
+  "model_type": "mbart",
+  "normalize_before": true,
+  "normalize_embedding": true,
+  "num_beams": 5,
+  "num_hidden_layers": 12,
+  "output_past": true,
+  "pad_token_id": 1,
+  "scale_embedding": true,
+  "static_position_embeddings": false,
+  "tokenizer_class": "MBart50Tokenizer",
+  "transformers_version": "4.23.1",
+  "use_cache": true,
+  "vocab_size": 250054
+}
+
+loading file sentencepiece.bpe.model from cache at /home/huangjie/.cache/huggingface/hub/models--facebook--mbart-large-50/snapshots/eab25f78110b11bfbf981249a6204e258f8a3312/sentencepiece.bpe.model
+loading file tokenizer.json from cache at None
+loading file added_tokens.json from cache at None
+loading file special_tokens_map.json from cache at /home/huangjie/.cache/huggingface/hub/models--facebook--mbart-large-50/snapshots/eab25f78110b11bfbf981249a6204e258f8a3312/special_tokens_map.json
+loading file tokenizer_config.json from cache at /home/huangjie/.cache/huggingface/hub/models--facebook--mbart-large-50/snapshots/eab25f78110b11bfbf981249a6204e258f8a3312/tokenizer_config.json
+loading configuration file config.json from cache at /home/huangjie/.cache/huggingface/hub/models--facebook--mbart-large-50/snapshots/eab25f78110b11bfbf981249a6204e258f8a3312/config.json
+Model config MBartConfig {
+  "_name_or_path": "facebook/mbart-large-50",
+  "_num_labels": 3,
+  "activation_dropout": 0.0,
+  "activation_function": "gelu",
+  "add_bias_logits": false,
+  "add_final_layer_norm": true,
+  "architectures": [
+    "MBartForConditionalGeneration"
+  ],
+  "attention_dropout": 0.0,
+  "bos_token_id": 0,
+  "classif_dropout": 0.0,
+  "classifier_dropout": 0.0,
+  "d_model": 1024,
+  "decoder_attention_heads": 16,
+  "decoder_ffn_dim": 4096,
+  "decoder_layerdrop": 0.0,
+  "decoder_layers": 12,
+  "decoder_start_token_id": 2,
+  "dropout": 0.1,
+  "early_stopping": true,
+  "encoder_attention_heads": 16,
+  "encoder_ffn_dim": 4096,
+  "encoder_layerdrop": 0.0,
+  "encoder_layers": 12,
+  "eos_token_id": 2,
+  "forced_eos_token_id": 2,
+  "gradient_checkpointing": false,
+  "id2label": {
+    "0": "LABEL_0",
+    "1": "LABEL_1",
+    "2": "LABEL_2"
+  },
+  "init_std": 0.02,
+  "is_encoder_decoder": true,
+  "label2id": {
+    "LABEL_0": 0,
+    "LABEL_1": 1,
+    "LABEL_2": 2
+  },
+  "max_length": 200,
+  "max_position_embeddings": 1024,
+  "model_type": "mbart",
+  "normalize_before": true,
+  "normalize_embedding": true,
+  "num_beams": 5,
+  "num_hidden_layers": 12,
+  "output_past": true,
+  "pad_token_id": 1,
+  "scale_embedding": true,
+  "static_position_embeddings": false,
+  "tokenizer_class": "MBart50Tokenizer",
+  "transformers_version": "4.23.1",
+  "use_cache": true,
+  "vocab_size": 250054
+}
+
+loading configuration file config.json from cache at /home/huangjie/.cache/huggingface/hub/models--facebook--mbart-large-50/snapshots/eab25f78110b11bfbf981249a6204e258f8a3312/config.json
+Model config MBartConfig {
+  "_name_or_path": "facebook/mbart-large-50",
+  "_num_labels": 3,
+  "activation_dropout": 0.0,
+  "activation_function": "gelu",
+  "add_bias_logits": false,
+  "add_final_layer_norm": true,
+  "architectures": [
+    "MBartForConditionalGeneration"
+  ],
+  "attention_dropout": 0.0,
+  "bos_token_id": 0,
+  "classif_dropout": 0.0,
+  "classifier_dropout": 0.0,
+  "d_model": 1024,
+  "decoder_attention_heads": 16,
+  "decoder_ffn_dim": 4096,
+  "decoder_layerdrop": 0.0,
+  "decoder_layers": 12,
+  "decoder_start_token_id": 2,
+  "dropout": 0.1,
+  "early_stopping": true,
+  "encoder_attention_heads": 16,
+  "encoder_ffn_dim": 4096,
+  "encoder_layerdrop": 0.0,
+  "encoder_layers": 12,
+  "eos_token_id": 2,
+  "forced_eos_token_id": 2,
+  "gradient_checkpointing": false,
+  "id2label": {
+    "0": "LABEL_0",
+    "1": "LABEL_1",
+    "2": "LABEL_2"
+  },
+  "init_std": 0.02,
+  "is_encoder_decoder": true,
+  "label2id": {
+    "LABEL_0": 0,
+    "LABEL_1": 1,
+    "LABEL_2": 2
+  },
+  "max_length": 200,
+  "max_position_embeddings": 1024,
+  "model_type": "mbart",
+  "normalize_before": true,
+  "normalize_embedding": true,
+  "num_beams": 5,
+  "num_hidden_layers": 12,
+  "output_past": true,
+  "pad_token_id": 1,
+  "scale_embedding": true,
+  "static_position_embeddings": false,
+  "tokenizer_class": "MBart50Tokenizer",
+  "transformers_version": "4.23.1",
+  "use_cache": true,
+  "vocab_size": 250054
+}
+
+loading configuration file config.json from cache at /home/huangjie/.cache/huggingface/hub/models--facebook--mbart-large-50/snapshots/eab25f78110b11bfbf981249a6204e258f8a3312/config.json
+Model config MBartConfig {
+  "_name_or_path": "/home/suraj/projects/mbart-50/hf_models/mbart-50-large",
+  "_num_labels": 3,
+  "activation_dropout": 0.0,
+  "activation_function": "gelu",
+  "add_bias_logits": false,
+  "add_final_layer_norm": true,
+  "architectures": [
+    "MBartForConditionalGeneration"
+  ],
+  "attention_dropout": 0.0,
+  "bos_token_id": 0,
+  "classif_dropout": 0.0,
+  "classifier_dropout": 0.0,
+  "d_model": 1024,
+  "decoder_attention_heads": 16,
+  "decoder_ffn_dim": 4096,
+  "decoder_layerdrop": 0.0,
+  "decoder_layers": 12,
+  "decoder_start_token_id": 2,
+  "dropout": 0.1,
+  "early_stopping": true,
+  "encoder_attention_heads": 16,
+  "encoder_ffn_dim": 4096,
+  "encoder_layerdrop": 0.0,
+  "encoder_layers": 12,
+  "eos_token_id": 2,
+  "forced_eos_token_id": 2,
+  "gradient_checkpointing": false,
+  "id2label": {
+    "0": "LABEL_0",
+    "1": "LABEL_1",
+    "2": "LABEL_2"
+  },
+  "init_std": 0.02,
+  "is_encoder_decoder": true,
+  "label2id": {
+    "LABEL_0": 0,
+    "LABEL_1": 1,
+    "LABEL_2": 2
+  },
+  "max_length": 200,
+  "max_position_embeddings": 1024,
+  "model_type": "mbart",
+  "normalize_before": true,
+  "normalize_embedding": true,
+  "num_beams": 5,
+  "num_hidden_layers": 12,
+  "output_past": true,
+  "pad_token_id": 1,
+  "scale_embedding": true,
+  "static_position_embeddings": false,
+  "tokenizer_class": "MBart50Tokenizer",
+  "transformers_version": "4.23.1",
+  "use_cache": true,
+  "vocab_size": 250054
+}
+
+loading weights file pytorch_model.bin from cache at /home/huangjie/.cache/huggingface/hub/models--facebook--mbart-large-50/snapshots/eab25f78110b11bfbf981249a6204e258f8a3312/pytorch_model.bin
+All model checkpoint weights were used when initializing MBartForConditionalGeneration.
+
+All the weights of MBartForConditionalGeneration were initialized from the model checkpoint at facebook/mbart-large-50.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use MBartForConditionalGeneration for predictions without further training.
+/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/transformers/optimization.py:306: FutureWarning: This implementation of AdamW is deprecated and will be removed in a future version. Use the PyTorch implementation torch.optim.AdamW instead, or set `no_deprecation_warning=True` to disable this warning
+  warnings.warn(
+wandb: Currently logged in as: jiejiejj. Use `wandb login --relogin` to force relogin
+wandb: Appending key for api.wandb.ai to your netrc file: /home/huangjie/.netrc
+wandb: Tracking run with wandb version 0.13.4
+wandb: Run data is saved locally in /domus/h1/huangjie/MtProject/wandb/run-20221014_191728-2sgxwumx
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run vital-feather-23
+wandb: ⭐️ View project at https://wandb.ai/jiejiejj/baseline
+wandb: 🚀 View run at https://wandb.ai/jiejiejj/baseline/runs/2sgxwumx
+/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/apex-0.1-py3.8.egg/apex/__init__.py:68: DeprecatedFeatureWarning: apex.amp is deprecated and will be removed by the end of February 2023. Use [PyTorch AMP](https://pytorch.org/docs/stable/amp.html)
+Selected optimization level O1:  Insert automatic casts around Pytorch functions and Tensor methods.
+
+Defaults for this optimization level are:
+enabled                : True
+opt_level              : O1
+cast_model_type        : None
+patch_torch_functions  : True
+keep_batchnorm_fp32    : None
+master_weights         : None
+loss_scale             : dynamic
+Processing user overrides (additional kwargs that are not None)...
+After processing overrides, optimization options are:
+enabled                : True
+opt_level              : O1
+cast_model_type        : None
+patch_torch_functions  : True
+keep_batchnorm_fp32    : None
+master_weights         : None
+loss_scale             : dynamic
+Warning:  multi_tensor_applier fused unscale kernel is unavailable, possibly because apex was installed without --cuda_ext --cpp_ext. Using Python fallback.  Original ImportError was: ModuleNotFoundError("No module named 'amp_C'")
+  0%|          | 0/10017 [00:00<?, ?it/s]/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/transformers/tokenization_utils_base.py:3668: FutureWarning: 
+`prepare_seq2seq_batch` is deprecated and will be removed in version 5 of HuggingFace Transformers. Use the regular
+`__call__` method to prepare your inputs and targets.
+
+Here is a short example:
+
+model_inputs = tokenizer(src_texts, text_target=tgt_texts, ...)
+
+If you either need to use different keyword arguments for the source and target texts, you should do two calls like
+this:
+
+model_inputs = tokenizer(src_texts, ...)
+labels = tokenizer(text_target=tgt_texts, ...)
+model_inputs["labels"] = labels["input_ids"]
+
+See the documentation of your specific tokenizer for more details on the specific arguments to the tokenizer of choice.
+For a more complete example, see the implementation of `prepare_seq2seq_batch`.
+
+  warnings.warn(formatted_warning, FutureWarning)
+/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/transformers/tokenization_utils_base.py:3542: UserWarning: `as_target_tokenizer` is deprecated and will be removed in v5 of Transformers. You can tokenize your labels by using the argument `text_target` of the regular `__call__` method (either in the same call as your input texts if you use the same keyword arguments, or in a separate call.
+  warnings.warn(
+Gradient overflow.  Skipping step, loss scaler 0 reducing loss scale to 32768.0
+  0%|          | 1/10017 [00:01<2:55:59,  1.05s/it]Gradient overflow.  Skipping step, loss scaler 0 reducing loss scale to 16384.0
+  0%|          | 2/10017 [00:01<2:09:56,  1.28it/s]Gradient overflow.  Skipping step, loss scaler 0 reducing loss scale to 8192.0
+  0%|          | 3/10017 [00:02<1:52:19,  1.49it/s]Gradient overflow.  Skipping step, loss scaler 0 reducing loss scale to 4096.0
+  0%|          | 4/10017 [00:02<1:43:43,  1.61it/s]Gradient overflow.  Skipping step, loss scaler 0 reducing loss scale to 2048.0
+  0%|          | 5/10017 [00:03<1:39:09,  1.68it/s]  0%|          | 6/10017 [00:04<1:58:32,  1.41it/s]  0%|          | 6/10017 [00:04<2:03:12,  1.35it/s]
 Traceback (most recent call last):
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/site-packages/urllib3/connectionpool.py", line 703, in urlopen
-    httplib_response = self._make_request(
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/site-packages/urllib3/connectionpool.py", line 386, in _make_request
-    self._validate_conn(conn)
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/site-packages/urllib3/connectionpool.py", line 1040, in _validate_conn
-    conn.connect()
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/site-packages/urllib3/connection.py", line 414, in connect
-    self.sock = ssl_wrap_socket(
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/site-packages/urllib3/util/ssl_.py", line 449, in ssl_wrap_socket
-    ssl_sock = _ssl_wrap_socket_impl(
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/site-packages/urllib3/util/ssl_.py", line 493, in _ssl_wrap_socket_impl
-    return ssl_context.wrap_socket(sock, server_hostname=server_hostname)
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/ssl.py", line 500, in wrap_socket
-    return self.sslsocket_class._create(
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/ssl.py", line 1040, in _create
-    self.do_handshake()
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/ssl.py", line 1309, in do_handshake
-    self._sslobj.do_handshake()
-ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1131)
-
-During handling of the above exception, another exception occurred:
-
+  File "run.py", line 238, in <module>
+    train(model, optimizer, train_loader, dev_loader, epochs=cfg['epochs'])
+  File "run.py", line 143, in train
+    scaled_loss.backward()
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/_tensor.py", line 307, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph, inputs=inputs)
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/autograd/__init__.py", line 154, in backward
+    Variable._execution_engine.run_backward(
+RuntimeError: CUDA out of memory. Tried to allocate 490.00 MiB (GPU 0; 14.61 GiB total capacity; 13.21 GiB already allocated; 289.56 MiB free; 13.35 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+wandb: Waiting for W&B process to finish... (failed 1). Press Control-C to abort syncing.
+wandb: - 0.001 MB of 0.001 MB uploaded (0.000 MB deduped)wandb: \ 0.001 MB of 0.005 MB uploaded (0.000 MB deduped)wandb: | 0.008 MB of 0.008 MB uploaded (0.000 MB deduped)wandb: Synced vital-feather-23: https://wandb.ai/jiejiejj/baseline/runs/2sgxwumx
+wandb: Synced 6 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20221014_191728-2sgxwumx/logs
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 8075) of binary: /domus/h1/huangjie/miniconda3/envs/py38_apex/bin/python3.8
 Traceback (most recent call last):
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/site-packages/requests/adapters.py", line 440, in send
-    resp = conn.urlopen(
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/site-packages/urllib3/connectionpool.py", line 785, in urlopen
-    retries = retries.increment(
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/site-packages/urllib3/util/retry.py", line 592, in increment
-    raise MaxRetryError(_pool, url, error or ResponseError(cause))
-urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /facebook/mbart-large-50/resolve/main/sentencepiece.bpe.model (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1131)')))
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "run.py", line 172, in <module>
-    train_set = ParallelCorpus(train_data, cfg)
-  File "run.py", line 33, in __init__
-    self.tokenizer = MBart50TokenizerFast.from_pretrained(cfg['model_name'])
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/site-packages/transformers/tokenization_utils_base.py", line 1723, in from_pretrained
-    resolved_vocab_files[file_id] = cached_path(
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/site-packages/transformers/utils/hub.py", line 282, in cached_path
-    output_path = get_from_cache(
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/site-packages/transformers/utils/hub.py", line 485, in get_from_cache
-    r = requests.head(url, headers=headers, allow_redirects=False, proxies=proxies, timeout=etag_timeout)
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/site-packages/requests/api.py", line 102, in head
-    return request('head', url, **kwargs)
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/site-packages/requests/api.py", line 61, in request
-    return session.request(method=method, url=url, **kwargs)
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/site-packages/requests/sessions.py", line 529, in request
-    resp = self.send(prep, **send_kwargs)
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/site-packages/requests/sessions.py", line 645, in send
-    r = adapter.send(request, **kwargs)
-  File "/Users/taohuadao/opt/anaconda3/envs/daily/lib/python3.8/site-packages/requests/adapters.py", line 517, in send
-    raise SSLError(e, request=request)
-requests.exceptions.SSLError: HTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /facebook/mbart-large-50/resolve/main/sentencepiece.bpe.model (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1131)')))
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/runpy.py", line 194, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/runpy.py", line 87, in _run_code
+    exec(code, run_globals)
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/distributed/launch.py", line 193, in <module>
+    main()
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/distributed/launch.py", line 189, in main
+    launch(args)
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/distributed/launch.py", line 174, in launch
+    run(args)
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/distributed/run.py", line 710, in run
+    elastic_launch(
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/distributed/launcher/api.py", line 131, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/distributed/launcher/api.py", line 259, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+run.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2022-10-14_19:17:45
+  host      : s152.uppmax.uu.se
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 8075)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================

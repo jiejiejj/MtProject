@@ -1,0 +1,74 @@
+Selected optimization level O1:  Insert automatic casts around Pytorch functions and Tensor methods.
+Defaults for this optimization level are:
+enabled                : True
+opt_level              : O1
+cast_model_type        : None
+patch_torch_functions  : True
+keep_batchnorm_fp32    : None
+master_weights         : None
+loss_scale             : dynamic
+Processing user overrides (additional kwargs that are not None)...
+After processing overrides, optimization options are:
+enabled                : True
+opt_level              : O1
+cast_model_type        : None
+patch_torch_functions  : True
+keep_batchnorm_fp32    : None
+master_weights         : None
+loss_scale             : dynamic
+Warning:  multi_tensor_applier fused unscale kernel is unavailable, possibly because apex was installed without --cuda_ext --cpp_ext. Using Python fallback.  Original ImportError was: ModuleNotFoundError("No module named 'amp_C'")
+/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/apex-0.1-py3.8.egg/apex/__init__.py:68: DeprecatedFeatureWarning: apex.amp is deprecated and will be removed by the end of February 2023. Use [PyTorch AMP](https://pytorch.org/docs/stable/amp.html)
+  0%|          | 0/682 [00:00<?, ?it/s]/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/transformers/tokenization_utils_base.py:3668: FutureWarning:
+`prepare_seq2seq_batch` is deprecated and will be removed in version 5 of HuggingFace Transformers. Use the regular
+`__call__` method to prepare your inputs and targets.
+Here is a short example:
+model_inputs = tokenizer(src_texts, text_target=tgt_texts, ...)
+If you either need to use different keyword arguments for the source and target texts, you should do two calls like
+this:
+model_inputs = tokenizer(src_texts, ...)
+labels = tokenizer(text_target=tgt_texts, ...)
+model_inputs["labels"] = labels["input_ids"]
+See the documentation of your specific tokenizer for more details on the specific arguments to the tokenizer of choice.
+For a more complete example, see the implementation of `prepare_seq2seq_batch`.
+  warnings.warn(formatted_warning, FutureWarning)
+/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/transformers/tokenization_utils_base.py:3542: UserWarning: `as_target_tokenizer` is deprecated and will be removed in v5 of Transformers. You can tokenize your labels by using the argument `text_target` of the regular `__call__` method (either in the same call as your input texts if you use the same keyword arguments, or in a separate call.
+  warnings.warn(
+  0%|          | 1/682 [00:01<15:01,  1.32s/it]
+Traceback (most recent call last):
+  File "run.py", line 238, in <module>
+    train(model, optimizer, train_loader, dev_loader, epochs=cfg['epochs'])
+  File "run.py", line 136, in train
+    loss = model(batch[0], batch[1])
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1120, in _call_impl
+    result = forward_call(*input, **kwargs)
+  File "run.py", line 90, in forward
+    outputs = self.bert(input_ids=input_ids, labels=labels)
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/transformers/models/mbart/modeling_mbart.py", line 1353, in forward
+    outputs = self.model(
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/transformers/models/mbart/modeling_mbart.py", line 1218, in forward
+    encoder_outputs = self.encoder(
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/transformers/models/mbart/modeling_mbart.py", line 843, in forward
+    layer_outputs = encoder_layer(
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/transformers/models/mbart/modeling_mbart.py", line 333, in forward
+    hidden_states, attn_weights, _ = self.self_attn(
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/transformers/models/mbart/modeling_mbart.py", line 200, in forward
+    query_states = self.q_proj(hidden_states) * self.scaling
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/nn/modules/module.py", line 1102, in _call_impl
+    return forward_call(*input, **kwargs)
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/nn/modules/linear.py", line 103, in forward
+    return F.linear(input, self.weight, self.bias)
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/apex-0.1-py3.8.egg/apex/amp/wrap.py", line 21, in wrapper
+    args[i] = utils.cached_cast(cast_fn, args[i], handle.cache)
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/apex-0.1-py3.8.egg/apex/amp/utils.py", line 97, in cached_cast
+    if cached_x.grad_fn.next_functions[1][0].variable is not x:
+IndexError: tuple index out of range

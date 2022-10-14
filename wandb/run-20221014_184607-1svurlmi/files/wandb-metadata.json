@@ -1,0 +1,30 @@
+{
+    "os": "Linux-3.10.0-1160.76.1.el7.x86_64-x86_64-with-glibc2.17",
+    "python": "3.8.13",
+    "heartbeatAt": "2022-10-14T16:46:08.503413",
+    "startedAt": "2022-10-14T16:46:07.779879",
+    "docker": null,
+    "gpu": "Tesla T4",
+    "gpu_count": 1,
+    "cpu_count": 16,
+    "cuda": null,
+    "args": [
+        "--local_rank=0",
+        "-c",
+        "config.json",
+        "-t",
+        "train"
+    ],
+    "state": "running",
+    "program": "run.py",
+    "codePath": "run.py",
+    "git": {
+        "remote": "git@github.com:jiejiejj/MtProject.git",
+        "commit": "130304cf7d0e71ce8e22d317479dfd3bb81e9919"
+    },
+    "email": null,
+    "root": "/domus/h1/huangjie/MtProject",
+    "host": "s152.uppmax.uu.se",
+    "username": "huangjie",
+    "executable": "/domus/h1/huangjie/miniconda3/envs/py38_apex/bin/python3.8"
+}

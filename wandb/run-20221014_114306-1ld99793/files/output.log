@@ -1,0 +1,32 @@
+/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/apex-0.1-py3.8.egg/apex/__init__.py:68: DeprecatedFeatureWarning: apex.amp is deprecated and will be removed by the end of February 2023. Use [PyTorch AMP](https://pytorch.org/docs/stable/amp.html)
+Traceback (most recent call last):
+  File "run.py", line 236, in <module>
+    train(model, optimizer, train_loader, dev_loader, epochs=cfg['epochs'])
+  File "run.py", line 125, in train
+    model = torch.nn.parallel.DistributedDataParallel(
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 580, in __init__
+    self._sync_params_and_buffers(authoritative_rank=0)
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 597, in _sync_params_and_buffers
+    self._distributed_broadcast_coalesced(
+  File "/domus/h1/huangjie/miniconda3/envs/py38_apex/lib/python3.8/site-packages/torch/nn/parallel/distributed.py", line 1334, in _distributed_broadcast_coalesced
+    dist._broadcast_coalesced(
+RuntimeError: CUDA out of memory. Tried to allocate 1.02 GiB (GPU 0; 3.95 GiB total capacity; 2.53 GiB already allocated; 862.81 MiB free; 2.55 GiB reserved in total by PyTorch) If reserved memory is >> allocated memory try setting max_split_size_mb to avoid fragmentation.  See documentation for Memory Management and PYTORCH_CUDA_ALLOC_CONF
+Selected optimization level O1:  Insert automatic casts around Pytorch functions and Tensor methods.
+Defaults for this optimization level are:
+enabled                : True
+opt_level              : O1
+cast_model_type        : None
+patch_torch_functions  : True
+keep_batchnorm_fp32    : None
+master_weights         : None
+loss_scale             : dynamic
+Processing user overrides (additional kwargs that are not None)...
+After processing overrides, optimization options are:
+enabled                : True
+opt_level              : O1
+cast_model_type        : None
+patch_torch_functions  : True
+keep_batchnorm_fp32    : None
+master_weights         : None
+loss_scale             : dynamic
+Warning:  multi_tensor_applier fused unscale kernel is unavailable, possibly because apex was installed without --cuda_ext --cpp_ext. Using Python fallback.  Original ImportError was: ModuleNotFoundError("No module named 'amp_C'")
