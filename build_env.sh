@@ -24,6 +24,7 @@ python3.8 -m pip install transformers
 python3.8 -m pip install sentencepiece
 python3.8 -m pip install protobuf
 python3.8 -m pip install sacremoses
+python3.8 -m pip install nltk
 python3.8 -m pip install --no-cache-dir wandb
 
 # apex
