@@ -19,6 +19,7 @@
   "target_maxlen": 512,
   "hidden_size": 1024,
   "accum_steps": 1,
+  "warmup_steps": 0,
   "eval_step": 2000,
   "best_loss": 80,
   "seeds": 65,

@@ -32,12 +32,13 @@ except ImportError:
 # transformers.logging.set_verbosity_error()
 
 # save model
-def save_model(cfg, logger, step, model, optimizer):
+def save_model(cfg, logger, step, model, optimizer, lr_scheduler):
     model_to_save = model.module if hasattr(model, 'module') else model
     # save static dict
     checkpoint = {
         'model': model_to_save.state_dict(),
-        'optimizer': optimizer.state_dict()
+        'optimizer': optimizer.state_dict(),
+        'lr_scheduler': lr_scheduler.state_dict()
     }
     torch.save(checkpoint, get_ckpt_path(cfg).format(step))
     logger.info('save train model.')
@@ -137,6 +138,15 @@ def train(model, optimizer, train_loader, dev_loader, epochs=1):
             device_ids=[cfg['local_rank']],
             output_device=cfg['local_rank']
         )
+
+    local_batch_counts = cfg['epoch_num'] * int(len(train_loader))  # batch count in one GPU
+    training_steps = int(np.ceil(local_batch_counts / cfg['accum_steps']))
+    lr_scheduler = get_scheduler(
+        "linear",
+        optimizer=optimizer,
+        num_warmup_steps=cfg['warmup_steps'],
+        num_training_steps=training_steps
+    )
     accum_steps = cfg['accum_steps']
     cur_step = 1
     for epoch in range(epochs):
@@ -157,6 +167,7 @@ def train(model, optimizer, train_loader, dev_loader, epochs=1):
 
             if (i + 1) % accum_steps == 0 or (i + 1) == int(len(train_loader)):
                 optimizer.step()
+                lr_scheduler.step()
                 optimizer.zero_grad()
 
                 if i and i % cfg['eval_step'] == 0 and cfg['local_rank'] == 0:
@@ -184,7 +195,7 @@ def train(model, optimizer, train_loader, dev_loader, epochs=1):
         wandb.finish()
 
 
-def eval(cur_step, model, val_dataloader):
+def eval(cur_step, model, val_dataloader, lr_scheduler=None):
     logger.info('Eval starts for current step {}'.format(cur_step))
     device = torch.device("cuda", cfg['local_rank']) if torch.cuda.is_available() else torch.device("cpu")
     model.to(device)
@@ -202,13 +213,13 @@ def eval(cur_step, model, val_dataloader):
             loss = model(batch[0], batch[1])
             eval_loss += loss.item()
 
-    if eval_loss / eval_steps < cfg['best_loss']:
+    if lr_scheduler and eval_loss / eval_steps < cfg['best_loss']:
         cfg['best_loss'] = eval_loss / eval_steps
         logger.info('Congrats!')
         ckpt_list.append(get_ckpt_path(cfg).format(cur_step))
         if len(ckpt_list) > cfg['max_ckpt']:
             os.remove(ckpt_list.pop(0))
-        save_model(cfg, logger, cur_step, model, optimizer)
+        save_model(cfg, logger, cur_step, model, optimizer, lr_scheduler)
 
     model.train()
     logger.info('step {}, validation loss: {}, bleu score: {}'.format(cur_step, eval_loss / eval_steps, bleu))
