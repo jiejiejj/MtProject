@@ -170,7 +170,7 @@ def train(model, optimizer, train_loader, dev_loader, epochs=1):
                 lr_scheduler.step()
                 optimizer.zero_grad()
 
-                if ((i and i % cfg['eval_step'] == 1) or (i + 1) == int(len(train_loader))) and cfg['local_rank'] == 0:
+                if ((i - 1 and i % cfg['eval_step'] == 1) or (i + 1) == int(len(train_loader))) and cfg['local_rank'] == 0:
                     dev_loss = eval(cur_step, model, dev_loader)
                     metrics = dict()
                     metrics['train/loss'] = loss.item()
