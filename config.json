@@ -18,7 +18,7 @@
   "body_maxlen": 512,
   "target_maxlen": 512,
   "hidden_size": 1024,
-  "accum_steps": 1,
+  "accum_steps": 2,
   "warmup_steps": 0,
   "eval_step": 2000,
   "best_loss": 80,
