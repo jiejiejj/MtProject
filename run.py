@@ -303,7 +303,7 @@ if __name__ == '__main__':
         print('Reading development data...')
         dev_set = ParallelCorpus(dev_data, cfg)
         dev_loader = Data.DataLoader(dev_set, batch_size=cfg['batch_size'], shuffle=True)
-        train(model, optimizer, train_loader, dev_loader, epochs=cfg['epochs'])
+        train(model, optimizer, train_loader, dev_loader, epochs=cfg['epoch_num'])
     elif args.type == 'eval':
         dev_data = process_data(cfg['dev_src_path'], cfg['dev_tgt_path'])
         print('Reading development data...')
