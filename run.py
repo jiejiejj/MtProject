@@ -19,8 +19,8 @@ from utils import *
 import argparse
 from datetime import timedelta
 import wandb
+from nltk.translate.bleu_score import corpus_bleu
 
-best_loss = 80
 try:
     from apex import amp
     USE_AMP = True #True
@@ -32,6 +32,7 @@ except ImportError:
 # transformers.logging.set_verbosity_error()
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 eval_pred_list = []
+best_loss = 80
 
 # seeds
 def set_seeds(SEED):
@@ -93,8 +94,8 @@ class MBart(nn.Module):
     def generate(self, input_ids, labels, decoder_start_token):
         generated_tokens = self.bert.generate(input_ids, decoder_start_token_id=self.tokenizer.lang_code_to_id[
             decoder_start_token])
-        generated_sentence = self.tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)[0]
-        ground_truth_sentence = self.tokenizer.batch_decode(labels, skip_special_tokens=True)[0]
+        generated_sentence = self.tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)
+        ground_truth_sentence = self.tokenizer.batch_decode(labels, skip_special_tokens=True)
         return generated_sentence, ground_truth_sentence
 
 
@@ -122,21 +123,23 @@ def train(model, optimizer, train_loader, dev_loader, epochs=1):
         model, optimizer = amp.initialize(model, optimizer, opt_level='O1')
 
     # model
-    '''model = torch.nn.parallel.DistributedDataParallel(
-        model,
-        device_ids=[cfg['local_rank']],
-        output_device=cfg['local_rank']
-    )
-'''
+    if cfg['is_distributed']:
+        model = torch.nn.parallel.DistributedDataParallel(
+            model,
+            device_ids=[cfg['local_rank']],
+            output_device=cfg['local_rank']
+        )
+    accum_steps = cfg['accum_steps']
+    cur_step = 1
     for epoch in range(epochs):
         model.train()
         logger.info('Epoch {}'.format(epoch))
         for i, data in enumerate(tqdm(train_loader)):
             batch = tuple(t.to(device) for t in data)
             loss = model(batch[0], batch[1])
-            # loss = model(batch)
             logger.info("step {}, training loss {}".format(i, loss.item()))
-            optimizer.zero_grad()
+            loss = loss / accum_steps
+
             # apex
             if USE_AMP:
                 with amp.scale_loss(loss, optimizer) as scaled_loss:
@@ -144,14 +147,21 @@ def train(model, optimizer, train_loader, dev_loader, epochs=1):
             else:
                 loss.backward()
 
-            optimizer.step()
-#            optimizer.zero_grad()
-            if i and i % 50 == 0 and cfg['local_rank'] == 0:
-                #optimizer.zero_grad()
-                #optimizer.step()
-                eval(i, model, dev_loader)
-           # torch.distributed.barrier()
-            gc.collect()
+            if (i + 1) % accum_steps == 0 or (i + 1) == int(len(train_loader)):
+                optimizer.step()
+                optimizer.zero_grad()
+
+                if i and i % cfg['eval_step'] == 0 and cfg['local_rank'] == 0:
+                    dev_loss, dev_bleu = eval(cur_step, model, dev_loader)
+                    metrics = dict()
+                    metrics['train/loss'] = loss.item
+                    metrics['dev/loss'] = dev_loss
+                    metrics['bleu'] = dev_bleu
+                    wandb.log(metrics)
+
+            if cfg['is_distributed']: torch.distributed.barrier()
+            cur_step += 1
+
     if cfg['local_rank'] == 0:
         wandb.finish()
 
@@ -161,26 +171,51 @@ def eval(cur_step, model, val_dataloader):
     device = torch.device("cuda", cfg['local_rank']) if torch.cuda.is_available() else torch.device("cpu")
     model.to(device)
     model.eval()
-    eval_loss, eval_accuracy, eval_steps, eval_recall, eval_fl = 0, 0, 0, 0, 0
+    eval_loss, eval_steps, bleu= 0, 0, 0
+    references, hypotheses = [], []
     with torch.no_grad():
         for idx, batch in enumerate(tqdm(val_dataloader)):
             eval_steps += 1
             batch = tuple(t.to(device) for t in batch)
+            generated_sentences, ground_truth_sentences = model.generate(batch[0], batch[1], 'en_XX')
+            hypotheses.extend(generated_sentences)
+            references.extend(ground_truth_sentences)
             if idx == 0:
-                generated_sentence, ground_truth_sentence = model.generate(batch[0], batch[1], 'en_XX')
-                logger.info('Prediction Sentence: {}'.format(generated_sentence))
-                logger.info('Ground Truth Sentence: {}'.format(ground_truth_sentence))
+                logger.info('Prediction Sentence: {}'.format(generated_sentences))
+                logger.info('Ground Truth Sentence: {}'.format(ground_truth_sentences))
+
             loss = model(batch[0], batch[1])
             eval_loss += loss.item()
-   # model.train()
-    global best_loss
-    if eval_loss / eval_steps < best_loss:
-        best_loss = eval_loss / eval_steps
+
+    bleu = bleu_score(references, hypotheses)
+    if eval_loss / eval_steps < cfg['best_loss']:
+        cfg['best_loss'] = eval_loss / eval_steps
         logger.info('Congrats!')
         # save(model, optimizer)
         # get_ckpt_path(cfg).format(step)
     model.train()
-    logger.info('step {}, validation loss: {}'.format(cur_step, eval_loss / eval_steps))
+    logger.info('step {}, validation loss: {}, bleu score: {}'.format(cur_step, eval_loss / eval_steps, bleu))
+    return eval_loss / eval_steps, bleu
+
+def bleu_score(ref_list, hyp_list):
+    references = [[[ref]] for ref in ref_list]
+    hypotheses = [[hpy] for hpy in hyp_list]
+    return corpus_bleu(references, hypotheses)
+
+def predict(model, pred_dataloader):
+    device = torch.device("cuda", cfg['local_rank']) if torch.cuda.is_available() else torch.device("cpu")
+    model.to(device)
+    model.eval()
+    predicts, references = [], []
+    with torch.no_grad():
+        for idx, batch in enumerate(tqdm(pred_dataloader)):
+            batch = tuple(t.to(device) for t in batch)
+            generated_sentence, ground_truth_sentence = model.generate(batch[0], batch[1], 'en_XX')
+            references.extend(ground_truth_sentence)
+            predicts.extend(generated_sentence)
+    bleu = bleu_score(references, predicts)
+    logger.info("Corpus BLEU score: {}".format(bleu))
+    return predicts, references
 
 
 def process_data(file_gl, file_en):
@@ -208,9 +243,11 @@ if __name__ == '__main__':
 
     # gpu
     os.environ["CUDA_VISIBLE_DEVICES"] = cfg['gpu']
+    cfg['is_distributed'] = len(cfg['gpu'].split(',')) > 1
     cfg['local_rank'] = 0
+
     # dpp
-    if args.type == 'triain':
+    if cfg['is_distributed'] and args.type == 'train':
         torch.distributed.init_process_group(backend="nccl", timeout=timedelta(hours=4))
         local_rank = torch.distributed.get_rank()
         torch.cuda.set_device(local_rank)
