@@ -252,6 +252,7 @@ if __name__ == '__main__':
 
     # logger
     logger = get_logger(cfg)
+    logger.info(str(cfg))
 
     model = MBart(freeze_bert=False, model_name=cfg['model_name'], hidden_size=cfg['hidden_size'])
     optimizer = AdamW(model.parameters(), lr=cfg['lr'], weight_decay=cfg['weight_decay'])
