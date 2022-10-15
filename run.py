@@ -30,9 +30,17 @@ except ImportError:
 
 
 # transformers.logging.set_verbosity_error()
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-eval_pred_list = []
-best_loss = 80
+
+# save model
+def save_model(cfg, logger, step, model, optimizer):
+    model_to_save = model.module if hasattr(model, 'module') else model
+    # save static dict
+    checkpoint = {
+        'model': model_to_save.state_dict(),
+        'optimizer': optimizer.state_dict()
+    }
+    torch.save(checkpoint, get_ckpt_path(cfg).format(step))
+    logger.info('save train model.')
 
 # seeds
 def set_seeds(SEED):
@@ -154,13 +162,23 @@ def train(model, optimizer, train_loader, dev_loader, epochs=1):
                 if i and i % cfg['eval_step'] == 0 and cfg['local_rank'] == 0:
                     dev_loss = eval(cur_step, model, dev_loader)
                     metrics = dict()
-                    metrics['train/loss'] = loss.item
+                    metrics['train/loss'] = loss.item()
                     metrics['dev/loss'] = dev_loss
                     # metrics['bleu'] = dev_bleu
                     wandb.log(metrics)
 
             if cfg['is_distributed']: torch.distributed.barrier()
             cur_step += 1
+
+        # epoch end
+        if cfg['local_rank'] == 0:
+            dev_loss = eval(cur_step, model, dev_loader)
+            metrics = dict()
+            metrics['train/loss'] = loss.item()
+            metrics['dev/loss'] = dev_loss
+            # metrics['bleu'] = dev_bleu
+            wandb.log(metrics)
+        if cfg['is_distributed']: torch.distributed.barrier()
 
     if cfg['local_rank'] == 0:
         wandb.finish()
@@ -187,8 +205,11 @@ def eval(cur_step, model, val_dataloader):
     if eval_loss / eval_steps < cfg['best_loss']:
         cfg['best_loss'] = eval_loss / eval_steps
         logger.info('Congrats!')
-        # save(model, optimizer)
-        # get_ckpt_path(cfg).format(step)
+        ckpt_list.append(get_ckpt_path(cfg).format(cur_step))
+        if len(ckpt_list) > cfg['max_ckpt']:
+            os.remove(ckpt_list.pop(0))
+        save_model(cfg, logger, cur_step, model, optimizer)
+
     model.train()
     logger.info('step {}, validation loss: {}, bleu score: {}'.format(cur_step, eval_loss / eval_steps, bleu))
     return eval_loss / eval_steps
@@ -236,6 +257,9 @@ if __name__ == '__main__':
     cfg = load_json(get_abs_path('config.json'))
     cfg['time_str'] = args.type + '_' + get_datetime()
     set_seeds(cfg['seeds'])
+
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    ckpt_list = []
 
     # gpu
     os.environ["CUDA_VISIBLE_DEVICES"] = cfg['gpu']
