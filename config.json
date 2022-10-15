@@ -4,6 +4,8 @@
   "train_tgt_path": "gl_to_en/en.train",
   "dev_src_path": "gl_to_en/gl.dev",
   "dev_tgt_path": "gl_to_en/en.dev",
+  "test_src_path": "gl_to_en/gl.test",
+  "test_tgt_path": "gl_to_en/en.test",
   "src_lang": "gl_ES",
   "tgt_lang": "en_XX",
   "model_name": "facebook/mbart-large-50",

@@ -23,7 +23,7 @@ from nltk.translate.bleu_score import corpus_bleu
 
 try:
     from apex import amp
-    USE_AMP = True #True
+    USE_AMP = False #True
 except ImportError:
     USE_AMP = False
     print('Warning: Apex not installed.')
@@ -152,11 +152,11 @@ def train(model, optimizer, train_loader, dev_loader, epochs=1):
                 optimizer.zero_grad()
 
                 if i and i % cfg['eval_step'] == 0 and cfg['local_rank'] == 0:
-                    dev_loss, dev_bleu = eval(cur_step, model, dev_loader)
+                    dev_loss = eval(cur_step, model, dev_loader)
                     metrics = dict()
                     metrics['train/loss'] = loss.item
                     metrics['dev/loss'] = dev_loss
-                    metrics['bleu'] = dev_bleu
+                    # metrics['bleu'] = dev_bleu
                     wandb.log(metrics)
 
             if cfg['is_distributed']: torch.distributed.barrier()
@@ -172,22 +172,18 @@ def eval(cur_step, model, val_dataloader):
     model.to(device)
     model.eval()
     eval_loss, eval_steps, bleu= 0, 0, 0
-    references, hypotheses = [], []
     with torch.no_grad():
         for idx, batch in enumerate(tqdm(val_dataloader)):
             eval_steps += 1
             batch = tuple(t.to(device) for t in batch)
-            generated_sentences, ground_truth_sentences = model.generate(batch[0], batch[1], 'en_XX')
-            hypotheses.extend(generated_sentences)
-            references.extend(ground_truth_sentences)
             if idx == 0:
+                generated_sentences, ground_truth_sentences = model.generate(batch[0], batch[1], 'en_XX')
                 logger.info('Prediction Sentence: {}'.format(generated_sentences))
                 logger.info('Ground Truth Sentence: {}'.format(ground_truth_sentences))
 
             loss = model(batch[0], batch[1])
             eval_loss += loss.item()
 
-    bleu = bleu_score(references, hypotheses)
     if eval_loss / eval_steps < cfg['best_loss']:
         cfg['best_loss'] = eval_loss / eval_steps
         logger.info('Congrats!')
@@ -195,11 +191,11 @@ def eval(cur_step, model, val_dataloader):
         # get_ckpt_path(cfg).format(step)
     model.train()
     logger.info('step {}, validation loss: {}, bleu score: {}'.format(cur_step, eval_loss / eval_steps, bleu))
-    return eval_loss / eval_steps, bleu
+    return eval_loss / eval_steps
 
 def bleu_score(ref_list, hyp_list):
-    references = [[[ref]] for ref in ref_list]
-    hypotheses = [[hpy] for hpy in hyp_list]
+    references = [[ref.split()] for ref in ref_list]
+    hypotheses = [hpy.split() for hpy in hyp_list]
     return corpus_bleu(references, hypotheses)
 
 def predict(model, pred_dataloader):
@@ -257,19 +253,30 @@ if __name__ == '__main__':
     # logger
     logger = get_logger(cfg)
 
-    # data
-    train_data = process_data(cfg['train_src_path'], cfg['train_tgt_path'])
-    dev_data = process_data(cfg['dev_src_path'], cfg['dev_tgt_path'])
-
-    print('Reading training data...')
-    train_set = ParallelCorpus(train_data, cfg)
-    train_loader = Data.DataLoader(train_set, batch_size=cfg['batch_size'], shuffle=True)
-
-    print('Reading development data...')
-    dev_set = ParallelCorpus(dev_data, cfg)
-    dev_loader = Data.DataLoader(dev_set, batch_size=cfg['batch_size'], shuffle=True)
-
     model = MBart(freeze_bert=False, model_name=cfg['model_name'], hidden_size=cfg['hidden_size'])
     optimizer = AdamW(model.parameters(), lr=cfg['lr'], weight_decay=cfg['weight_decay'])
 
-    train(model, optimizer, train_loader, dev_loader, epochs=cfg['epochs'])
+    if args.type == 'train':
+        train_data = process_data(cfg['train_src_path'], cfg['train_tgt_path'])
+        dev_data = process_data(cfg['dev_src_path'], cfg['dev_tgt_path'])
+
+        print('Reading training data...')
+        train_set = ParallelCorpus(train_data, cfg)
+        train_loader = Data.DataLoader(train_set, batch_size=cfg['batch_size'], shuffle=True)
+
+        print('Reading development data...')
+        dev_set = ParallelCorpus(dev_data, cfg)
+        dev_loader = Data.DataLoader(dev_set, batch_size=cfg['batch_size'], shuffle=True)
+        train(model, optimizer, train_loader, dev_loader, epochs=cfg['epochs'])
+    elif args.type == 'eval':
+        dev_data = process_data(cfg['dev_src_path'], cfg['dev_tgt_path'])
+        print('Reading development data...')
+        dev_set = ParallelCorpus(dev_data, cfg)
+        dev_loader = Data.DataLoader(dev_set, batch_size=cfg['batch_size'], shuffle=True)
+        eval(0, model, dev_loader)
+    else:
+        test_data = process_data(cfg['test_src_path'], cfg['test_tgt_path'])
+        print('Reading development data...')
+        test_set = ParallelCorpus(test_data, cfg)
+        pred_loader = Data.DataLoader(test_set, batch_size=cfg['batch_size'], shuffle=True)
+        predict(model, pred_loader)
