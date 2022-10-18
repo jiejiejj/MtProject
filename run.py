@@ -181,7 +181,8 @@ def train(model, optimizer, train_loader, dev_loader, epochs=1):
             if cfg['is_distributed']: torch.distributed.barrier()
             cur_step += 1
         # epoch end
-        save_model(cfg, logger, cur_step, model, optimizer, lr_scheduler)
+        if epoch == epochs - 1:
+            save_model(cfg, logger, cur_step, model, optimizer, lr_scheduler)
 
     if cfg['local_rank'] == 0:
         wandb.finish()

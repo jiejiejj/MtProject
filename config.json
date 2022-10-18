@@ -12,7 +12,7 @@
   "outputs_path": "outputs/",
   "output_model": "",  
   "gpu": "0",
-  "max_ckpt": 2,
+  "max_ckpt": 1,
   "epoch_num": 2,
   "batch_size": 1,
   "body_maxlen": 512,
